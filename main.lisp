@@ -53,10 +53,16 @@
 (defun solve (lst &optional silent)
     (let ((oneStep (standartize (aplicateFind lst))))
         (if (equal oneStep lst)
-            lst
             (progn
-                (if (not silent) (write-line (write-to-string lst)) nil) ;better formating? - list show weardly
-            (solve oneStep silent))
+                (if (not silent) 
+                    (write-line (write-to-string lst))
+                    nil)
+                lst)
+            (progn
+                (if (not silent) 
+                    (write-line (write-to-string lst)) ;better formating? - list show weardly
+                    nil) 
+                (solve oneStep silent))
         )
     )
 )
@@ -296,6 +302,25 @@
     )
 )
 
+;if lst represents a number in lambda calculus then returns the number in digit representation
+(defun lambdaToNumber(lst )
+    (if (and (isLambda lst) (isLambda (caddr lst)))
+        (lambdaToNumberInner (caddr (caddr lst)) (cadr lst) (cadr (caddr lst)) 0)
+        nil
+    )
+)
+(defun lambdaToNumberInner(lst delimCounter delimEnd counter)
+    (cond 
+        ((equal lst delimEnd)
+            counter)
+        ((and (list lst) (equal (car lst) delimCounter))
+            (lambdaToNumberInner (cadr lst) delimCounter delimEnd (+ counter 1)))
+        (T 
+            nil)
+    )
+)
+
+;compilation of every function so the stack won't overflow
 (compile 'detectVariables)
 (compile 'printVariables)
 (compile 'getFreeVars)
