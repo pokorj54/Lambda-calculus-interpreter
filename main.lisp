@@ -223,7 +223,7 @@
 ;checks if value is one of the defined functions
 (defun isExpandable (value)
     (cond
-        ((null value)
+        ((listp value)
             nil)
         ((numberp value)
             T)
